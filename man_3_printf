@@ -89,4 +89,4 @@ ERRORS
        None.
 
 SEE ALSO
-       printf(3), sprintf(
+       printf(3), sprintf()
