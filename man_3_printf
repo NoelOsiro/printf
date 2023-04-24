@@ -1,0 +1,92 @@
+NAME
+       _printf - formatted output conversion
+
+SYNOPSIS
+       #include <stdio.h>
+
+       int _printf(const char *format, ...);
+
+DESCRIPTION
+       _printf() produces output according to a format as described below. The
+       format string is composed of zero or more directives, which are either
+       ordinary characters (not %), or conversion specifications.
+
+       Each conversion specification begins with a % character and may be
+       followed by the following characters:
+
+       %     A % character is written. No argument is converted. The complete
+             conversion specification is '%%'.
+
+       c     The int argument is converted to an unsigned char, and the
+             resulting character is written.
+
+       s     The argument must be a pointer to an array of characters. The
+             characters are written up to (but not including) a terminating
+             null character. If the pointer is null, the string "(null)" is
+             written.
+
+       d,i   The argument is converted to a signed decimal integer.
+
+       u     The argument is converted to an unsigned decimal integer.
+
+       o     The argument is converted to an unsigned octal.
+
+       x,X   The argument is converted to an unsigned hexadecimal.
+
+       S     The argument must be a pointer to an array of characters. Non-
+             printable characters (0 < ASCII value < 32 or >= 127) are printed
+             this way: \x, followed by the ASCII code value in hexadecimal
+             (upper case - always 2 characters).
+
+       p     The argument is a pointer, and the value of the pointer is printed
+             in hexadecimal.
+
+RETURN VALUE
+       The _printf() function returns the number of characters printed (excluding
+       the null byte used to end output to strings).
+
+EXAMPLES
+       Example usage of _printf():
+
+           _printf("Hello, %s!\n", "world");
+           // Output: "Hello, world!"
+
+           _printf("The value of pi is %f\n", 3.14159);
+           // Output: "The value of pi is 3.141590"
+
+           int age = 25;
+           _printf("I am %d years old\n", age);
+           // Output: "I am 25 years old"
+
+           char letter = 'A';
+           _printf("The letter is %c\n", letter);
+           // Output: "The letter is A"
+
+           char *str = "computer";
+           _printf("The word is %s\n", str);
+           // Output: "The word is computer"
+
+           void *ptr = &age;
+           _printf("The pointer address is %p\n", ptr);
+           // Output: "The pointer address is 0x7ffcde9d7c1c"
+
+           _printf("The value in binary is %b\n", 42);
+           // Output: "The value in binary is 101010"
+
+           _printf("The value in octal is %o\n", 42);
+           // Output: "The value in octal is 52"
+
+           _printf("The value in hexadecimal is %x\n", 42);
+           // Output: "The value in hexadecimal is 2a"
+
+           _printf("The value in uppercase hexadecimal is %X\n", 42);
+           // Output: "The value in uppercase hexadecimal is 2A"
+
+           _printf("Non-printable characters: %S\n", "Hello\x1bWorld");
+           // Output: "Non-printable characters: Hello\x1BWorld"
+
+ERRORS
+       None.
+
+SEE ALSO
+       printf(3), sprintf(
