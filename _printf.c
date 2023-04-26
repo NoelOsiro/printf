@@ -6,7 +6,6 @@ int _putchar(char c);
 int _printstr(char *s, int *count);
 int _printint(int i, int *count);
 
-
 /**
  * _printf - Prints a formatted string to standard output.
  * @format: A pointer to a string containing format specifiers.
@@ -50,6 +49,18 @@ int i = va_arg(args, int);
 _printint(i, &count);
 break;
 }
+default:
+_putchar('%');
+count++;
+while (*format && *format != '%')
+{
+_putchar(*format);
+count++;
+format++;
+}
+if (*format == '%')
+format--;
+break;
 }
 }
 else
