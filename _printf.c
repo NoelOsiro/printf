@@ -1,5 +1,12 @@
 #include "main.h"
 
+/**
+ * _printf - Prints formatted output to stdout
+ * @format: A character string containing format specifiers
+ *
+ * Return: The number of characters printed (excluding the null byte used to
+ *         end output to strings)
+ */
 int _printf(const char *format, ...) {
     va_list args;
     va_start(args, format);
@@ -25,3 +32,5 @@ int _printf(const char *format, ...) {
     va_end(args);
     return len;
 }
+
+
