@@ -2,18 +2,25 @@
 #define MAIN_H
 
 #include <stdarg.h>
-#include <stdint.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
 
-#define BUFFER_SIZE 1024
-extern char buffer[BUFFER_SIZE];
+typedef struct {
+    char buf[1024];
+    size_t pos;
+} Buffer;
+
+void init_buf(Buffer *buf);
+void flush_buf(Buffer *buf);
+void add_to_buf(Buffer *buf, char c);
+void add_str_to_buf(Buffer *buf, const char *str);
+int print_int(Buffer *buf, unsigned int num, int base, bool is_unsigned, bool is_negative, int width, char pad_char);
+int get_flag(const char **format);
+int get_width(const char **format, va_list args);
+int get_op(Buffer *buf, const char *format, va_list args, int flag);
 
 int _printf(const char *format, ...);
-void write_char(char c, int *n);
-void write_string(char *str, int *n);
-void write_percent(int *n);
-void write_int(int arg, int *n);
-void write_uint(uint32_t arg, int *n, int base, int is_uppercase);
-void write_pointer(void *arg, int *n);
-void write_string_special(char *str, int *n);
 
 #endif /* MAIN_H */
