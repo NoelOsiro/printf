@@ -1,81 +1,44 @@
 #include "main.h"
-#include <stdarg.h>
-
-#define NULL ((void *)0)
-
-int _printchar(char c, int *count);
-int _putchar(char c);
-int _printstr(char *s, int *count);
-int _printint(int i, int *count);
-
 /**
- * _printf - Prints a formatted string to standard output.
- * @format: A pointer to a string containing format specifiers.
- * @...: Optional arguments to be printed according to the format string.
- *
- * Return: The number of characters printed.
+ * _printf - printf function
+ * @format: const char pointer
+ * Return: b_len
+ * this is the start of the file
  */
 int _printf(const char *format, ...)
 {
-int count;
-va_list args;
-va_start(args, format);
+	int (*pfunc)(va_list, flags_t *);
+	const char *p;
+	va_list arguments;
+	flags_t flags = {0, 0, 0};
 
+	register int count = 0;
 
-count = 0;
-if (format == NULL)
-{
-return -1;
-}
-while (*format)
-{
-if (*format == '%')
-{
-format++;
-switch (*format)
-{
-case 'c': {
-char c = va_arg(args, int);
-_printchar(c, &count);
-break;
-}
-case 's': {
-char *s = va_arg(args, char *);
-_printstr(s, &count);
-break;
-}
-case '%': {
-_putchar('%');
-count++;
-break;
-}
-case 'd':
-case 'i': {
-int i = va_arg(args, int);
-_printint(i, &count);
-break;
-}
-default:
-_putchar('%');
-count++;
-while (*format && *format != '%')
-{
-_putchar(*format);
-count++;
-format++;
-}
-if (*format == '%')
-format--;
-break;
-}
-}
-else
-{
-_putchar(*format);
-count++;
-}
-format++;
-}
-va_end(args);
-return (count);
+	va_start(arguments, format);
+	if (!format || (format[0] == '%' && !format[1]))
+		return (-1);
+	if (format[0] == '%' && format[1] == ' ' && !format[2])
+		return (-1);
+	for (p = format; *p; p++)
+	{
+		if (*p == '%')
+		{
+			p++;
+			if (*p == '%')
+			{
+				count += _putchar('%');
+				continue;
+			}
+			while (get_flag(*p, &flags))
+				p++;
+			pfunc = get_print(*p);
+			count += (pfunc)
+				? pfunc(arguments, &flags)
+				: _printf("%%%c", *p);
+		} else
+			count += _putchar(*p);
+	}
+	_putchar(-1);
+	va_end(arguments);
+	return (count);
 }
