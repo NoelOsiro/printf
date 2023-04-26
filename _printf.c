@@ -7,80 +7,30 @@
  * Return: The number of characters printed (excluding the null byte used to
  *         end output to strings)
  */
-int _printf(const char *format, ...)
-{
-        int i = 0, n = 0;
-        char char_arg;
-        char *str_arg;
-        int int_arg;
-        uint32_t uint_arg;
-        void *ptr_arg;
-        va_list arg;
+int _printf(const char *format, ...) {
+    va_list args;
+    va_start(args, format);
 
-        va_start(arg, format);
+    Buffer buf;
+    init_buf(&buf);
 
-        while (format && format[i])
-        {
-                if (format[i] == '%')
-                {
-                        i++;
-
-                        switch (format[i]) {
-                        case 'c':
-                                char_arg = va_arg(arg, int);
-                                write_char(char_arg, &n);
-                                break;
-                        case 's':
-                                str_arg = va_arg(arg, char *);
-                                write_string(str_arg, &n);
-                                break;
-                        case '%':
-                                write_percent(&n);
-                                break;
-                        case 'd':
-                        case 'i':
-                                int_arg = va_arg(arg, int);
-                                write_int(int_arg, &n);
-                                break;
-                        case 'u':
-                                uint_arg = va_arg(arg, uint32_t);
-                                write_uint(uint_arg, &n, 10, 0);
-                                break;
-                        case 'o':
-                                uint_arg = va_arg(arg, uint32_t);
-                                write_uint(uint_arg, &n, 8, 0);
-                                break;
-                        case 'x':
-                                uint_arg = va_arg(arg, uint32_t);
-                                write_uint(uint_arg, &n, 16, 0);
-                                break;
-                        case 'X':
-                                uint_arg = va_arg(arg, uint32_t);
-                                write_uint(uint_arg, &n, 16, 1);
-                                break;
-                        case 'S':
-                                str_arg = va_arg(arg, char *);
-                                write_string_special(str_arg, &n);
-                                break;
-                        case 'p':
-                                ptr_arg = va_arg(arg, void *);
-                                write_pointer(ptr_arg, &n);
-                                break;
-                        default:
-                                write_char('%', &n);
-                                write_char(format[i], &n);
-                                break;
-                        }
-                }
-                else
-                {
-                        write_char(format[i], &n);
-                }
-
-                i++;
+    int len = 0;
+    while (*format) {
+        if (*format == '%') {
+            format++;
+            int flag = get_flag(&format);
+            int width = get_width(&format, args);
+            len += get_op(&buf, format++, args, flag | (width >= 0 ? 0 : 16)) - 1;
+        } else {
+            add_to_buf(&buf, *format++);
+            len++;
         }
+    }
 
-        va_end(arg);
+    flush_buf(&buf);
 
-        return (n);
+    va_end(args);
+    return len;
 }
+
+
