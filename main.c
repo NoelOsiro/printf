@@ -32,7 +32,6 @@ int main(void)
     printf("Address:[%p]\n", addr);
     len = _printf("Percent:[%%]\n");
     len2 = printf("Percent:[%%]\n");
-
     _printf("A char inside a sentence: %c. Did it work?\n", 'F');
     _printf("Len:[%d]\n", len);
     printf("Len:[%d]\n", len2);
@@ -41,6 +40,7 @@ int main(void)
     _printf("%");
     _printf(NULL);
     _printf("%c", '\0');
+    _printf("%c", 'S');
 
     return (0);
 }

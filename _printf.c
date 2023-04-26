@@ -1,6 +1,8 @@
 #include "main.h"
 #include <stdarg.h>
 
+#define NULL ((void *)0)
+
 int _printchar(char c, int *count);
 int _putchar(char c);
 int _printstr(char *s, int *count);
@@ -21,6 +23,10 @@ va_start(args, format);
 
 
 count = 0;
+if (format == NULL)
+{
+return -1;
+}
 while (*format)
 {
 if (*format == '%')
